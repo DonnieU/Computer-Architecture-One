@@ -250,7 +250,7 @@ class CPU {
             this.flags.equal = true;
         } else this.flags.equal = false;
 
-        console.log("Compare result: " + this.flags.equal);
+        // console.log("Compare result: " + this.flags.equal);
 
         this.reg.PC += 3;
     }
