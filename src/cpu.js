@@ -27,6 +27,8 @@ const PUSH = 0b00001010;
 const RET = 0b00010000;
 const ST = 0b00001001;
 const CMP = 0b00010110; // Compare instruction
+const JEQ = 0b00010011; // Jump if Equal
+const JNE = 0b00010100; // Jump if NOT Equal
 
 /**
  * Class for simulating a simple Computer (CPU & memory)
@@ -76,6 +78,8 @@ class CPU {
         bt[IRET] = this.IRET; // Interrupt Return
         bt[NOP] = this.NOP;
         bt[CMP] = this.CMP; // Compare instr.
+        bt[JEQ] = this.JEQ;
+        bt[JNE] = this.JNE;
 
         this.branchTable = bt;
     }
@@ -370,6 +374,32 @@ class CPU {
         const regA = this.ram.read(this.reg.PC + 1);
 
         this.reg.PC = this.reg[regA];
+        // console.log("regA: " + this.reg[regA]);
+    }
+
+    /**
+     * JEQ R -- Jump if Equal (flag is set)
+     */
+    JEQ() {
+        if (this.flags.equal) {
+            const regA = this.ram.read(this.reg.PC + 1);
+            this.reg.PC = this.reg[regA];
+        } else {
+            this.reg.PC += 2;
+        }
+    }
+
+    /**
+     * JNE R -- Jump if NOT Equal (flag is not set)
+     */
+    JNE() {
+        if (this.flags.equal === false) {
+            const regA = this.ram.read(this.reg.PC + 1);
+            this.reg.PC = this.reg[regA];
+            //console.log("In JNE!");
+        } else {
+            this.reg.PC += 2;
+        }
     }
 }
 
